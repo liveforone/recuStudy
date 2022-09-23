@@ -22,26 +22,26 @@ public class Study {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    private String user;
+    private String user;  //페이지 등록자
 
     @Column
     private int limitUser;  //제한인원(총 가능 인원)
 
     @Column
-    private int currentUser;  //현재 신청 인원
+    private int currUser;  //현재 신청 인원
 
     private String limitMonth;  //마감 월
     private String limitDay;  //마감 일
     private String location;  //스터디 장소
 
     @Builder
-    public Study(Long id, String title, String content, String user, int limitUser, int currentUser, String limitMonth, String limitDay, String location) {
+    public Study(Long id, String title, String content, String user, int limitUser, int currUser, String limitMonth, String limitDay, String location) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.limitUser = limitUser;
-        this.currentUser = currentUser;
+        this.currUser = currUser;
         this.limitMonth = limitMonth;
         this.limitDay = limitDay;
         this.location = location;

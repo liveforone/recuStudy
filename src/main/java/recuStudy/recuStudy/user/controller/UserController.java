@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import recuStudy.recuStudy.user.domain.Users;
 import recuStudy.recuStudy.user.dto.UserDto;
 import recuStudy.recuStudy.user.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.net.URI;
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,6 +67,19 @@ public class UserController {
         log.info("Login Success!!!");
 
         return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    /*
+    프론트 단에서 study1, 2, 3중 null 체크를 통해서
+    null이 아닌 것들만 내보내고, null인 것은 'null'이라고 내보내지 말고 아예 안내보는 방식으로 진행한다.
+    결론적으로 study는 프론트단에서 null체크를 하여서 내보낸다.
+     */
+    @GetMapping("/user/myPage")
+    public ResponseEntity<Users> myPage(Principal principal) {
+        String user = principal.getName();
+        Users users = userService.getUser(user);
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     /*

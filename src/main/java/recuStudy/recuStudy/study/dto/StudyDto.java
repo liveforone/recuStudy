@@ -13,7 +13,7 @@ public class StudyDto {
     private String content;
     private String user;
     private int limitUser;
-    private int currentUser;
+    private int currUser;
     private String limitMonth;
     private String limitDay;
     private String location;
@@ -25,7 +25,7 @@ public class StudyDto {
                 .content(content)
                 .user(user)
                 .limitUser(limitUser)
-                .currentUser(currentUser)
+                .currUser(currUser)
                 .limitMonth(limitMonth)
                 .limitDay(limitDay)
                 .location(location)

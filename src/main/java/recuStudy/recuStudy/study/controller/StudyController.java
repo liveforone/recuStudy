@@ -9,10 +9,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import recuStudy.recuStudy.study.domain.Study;
 import recuStudy.recuStudy.study.dto.StudyDto;
 import recuStudy.recuStudy.study.service.StudyService;
@@ -32,7 +29,18 @@ public class StudyController {
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<Study> studyList = studyService.getStudyList(pageable);
+
         return new ResponseEntity<>(studyList, HttpStatus.OK);
+    }
+
+    @GetMapping("/study/search")
+    public ResponseEntity<Page<Study>> studySearch(
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam("keyword") String keyword
+    ) {
+        Page<Study> searchList = studyService.getSearchList(keyword, pageable);
+
+        return new ResponseEntity<>(searchList, HttpStatus.OK);
     }
 
     @GetMapping("/study/post")
@@ -40,6 +48,11 @@ public class StudyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /*
+    문자열 길이(입력받은 월과일)가 한자리일 경우 앞에 0을 붙인다.
+    이렇게 설계하면 사용자가 한자릿수의 월과 일을 입력할때
+    앞에 0을 붙이던 붙이지 않던 서버에 원하는 값을 저장할 수있다.
+     */
     @PostMapping("/study/post")
     public ResponseEntity<?> studyPost(
             @RequestBody StudyDto studyDto,
@@ -53,5 +66,12 @@ public class StudyController {
         log.info("Study Save Success!!");
 
         return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    @GetMapping("/study/{id}")
+    public ResponseEntity<Study> detail(@PathVariable("id") Long id) {
+        Study study = studyService.getOne(id);
+
+        return new ResponseEntity<>(study, HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package recuStudy.recuStudy.user.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -78,6 +80,19 @@ public class UserService implements UserDetailsService {
         }
 
         return new User(users.getEmail(), users.getPassword(), authorities);
+    }
+
+    @Transactional
+    public void updateStudy(String title, String email) {
+        Users users = userRepository.findByEmail(email);
+
+        if (users.getStudy1() == null) {
+            userRepository.updateStudy1(title, email);
+        } else if (users.getStudy2() == null) {
+            userRepository.updateStudy2(title, email);
+        } else if (users.getStudy3() == null) {
+            userRepository.updateStudy3(title, email);
+        }
     }
 
     //== 유저 정보 가져오기 ==//
